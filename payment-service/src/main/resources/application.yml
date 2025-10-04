@@ -1,0 +1,21 @@
+server:
+  port: 9005
+spring:
+  application:
+    name: payment-service
+  cloud:
+    config:
+      uri: http://localhost:8888
+    discovery:
+      enabled: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/

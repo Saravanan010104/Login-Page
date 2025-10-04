@@ -1,0 +1,16 @@
+server:
+  port: 8761
+spring:
+  application:
+    name: discovery-server
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+# Eureka does not register itself
+eureka:
+  client:
+    register-with-eureka: false
+    fetch-registry: false

@@ -1,0 +1,30 @@
+server:
+  port: 9004
+spring:
+  application:
+    name: order-service
+  datasource:
+    url: jdbc:postgresql://localhost:5432/orderdb
+    username: orders
+    password: orders
+    hikari:
+      maximum-pool-size: 16
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+  cloud:
+    config:
+      uri: http://localhost:8888
+    discovery:
+      enabled: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/

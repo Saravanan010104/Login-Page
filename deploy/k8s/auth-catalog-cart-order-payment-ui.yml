@@ -1,0 +1,253 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-service
+  namespace: ecommerce
+spec:
+  selector:
+    app: auth-service
+  ports:
+    - port: 9001
+      targetPort: 9001
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-service
+  namespace: ecommerce
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auth-service
+  template:
+    metadata:
+      labels:
+        app: auth-service
+    spec:
+      containers:
+        - name: auth-service
+          image: ghcr.io/your-org/auth-service:latest
+          ports:
+            - containerPort: 9001
+          env:
+            - name: SPRING_CLOUD_CONFIG_URI
+              value: http://config-server.ecommerce.svc.cluster.local:8888
+            - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+              value: http://discovery-server.ecommerce.svc.cluster.local:8761/eureka/
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:postgresql://postgres.ecommerce.svc.cluster.local:5432/authdb
+            - name: SPRING_DATASOURCE_USERNAME
+              value: auth
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: auth
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: catalog-service
+  namespace: ecommerce
+spec:
+  selector:
+    app: catalog-service
+  ports:
+    - port: 9002
+      targetPort: 9002
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: catalog-service
+  namespace: ecommerce
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: catalog-service
+  template:
+    metadata:
+      labels:
+        app: catalog-service
+    spec:
+      containers:
+        - name: catalog-service
+          image: ghcr.io/your-org/catalog-service:latest
+          ports:
+            - containerPort: 9002
+          env:
+            - name: SPRING_CLOUD_CONFIG_URI
+              value: http://config-server.ecommerce.svc.cluster.local:8888
+            - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+              value: http://discovery-server.ecommerce.svc.cluster.local:8761/eureka/
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:postgresql://postgres.ecommerce.svc.cluster.local:5432/catalogdb
+            - name: SPRING_DATASOURCE_USERNAME
+              value: catalog
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: catalog
+            - name: SPRING_DATA_REDIS_HOST
+              value: redis.ecommerce.svc.cluster.local
+            - name: SPRING_DATA_REDIS_PORT
+              value: "6379"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cart-service
+  namespace: ecommerce
+spec:
+  selector:
+    app: cart-service
+  ports:
+    - port: 9003
+      targetPort: 9003
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cart-service
+  namespace: ecommerce
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cart-service
+  template:
+    metadata:
+      labels:
+        app: cart-service
+    spec:
+      containers:
+        - name: cart-service
+          image: ghcr.io/your-org/cart-service:latest
+          ports:
+            - containerPort: 9003
+          env:
+            - name: SPRING_CLOUD_CONFIG_URI
+              value: http://config-server.ecommerce.svc.cluster.local:8888
+            - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+              value: http://discovery-server.ecommerce.svc.cluster.local:8761/eureka/
+            - name: SPRING_DATA_REDIS_HOST
+              value: redis.ecommerce.svc.cluster.local
+            - name: SPRING_DATA_REDIS_PORT
+              value: "6379"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: order-service
+  namespace: ecommerce
+spec:
+  selector:
+    app: order-service
+  ports:
+    - port: 9004
+      targetPort: 9004
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: order-service
+  namespace: ecommerce
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: order-service
+  template:
+    metadata:
+      labels:
+        app: order-service
+    spec:
+      containers:
+        - name: order-service
+          image: ghcr.io/your-org/order-service:latest
+          ports:
+            - containerPort: 9004
+          env:
+            - name: SPRING_CLOUD_CONFIG_URI
+              value: http://config-server.ecommerce.svc.cluster.local:8888
+            - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+              value: http://discovery-server.ecommerce.svc.cluster.local:8761/eureka/
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:postgresql://postgres.ecommerce.svc.cluster.local:5432/orderdb
+            - name: SPRING_DATASOURCE_USERNAME
+              value: orders
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: orders
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: payment-service
+  namespace: ecommerce
+spec:
+  selector:
+    app: payment-service
+  ports:
+    - port: 9005
+      targetPort: 9005
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: payment-service
+  namespace: ecommerce
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: payment-service
+  template:
+    metadata:
+      labels:
+        app: payment-service
+    spec:
+      containers:
+        - name: payment-service
+          image: ghcr.io/your-org/payment-service:latest
+          ports:
+            - containerPort: 9005
+          env:
+            - name: SPRING_CLOUD_CONFIG_URI
+              value: http://config-server.ecommerce.svc.cluster.local:8888
+            - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+              value: http://discovery-server.ecommerce.svc.cluster.local:8761/eureka/
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ui-server
+  namespace: ecommerce
+spec:
+  selector:
+    app: ui-server
+  ports:
+    - port: 9000
+      targetPort: 9000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ui-server
+  namespace: ecommerce
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ui-server
+  template:
+    metadata:
+      labels:
+        app: ui-server
+    spec:
+      containers:
+        - name: ui-server
+          image: ghcr.io/your-org/ui-server:latest
+          ports:
+            - containerPort: 9000
+          env:
+            - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+              value: http://discovery-server.ecommerce.svc.cluster.local:8761/eureka/
+            - name: SPRING_CLOUD_CONFIG_URI
+              value: http://config-server.ecommerce.svc.cluster.local:8888
