@@ -1,0 +1,7 @@
+spring:
+  datasource:
+    hikari:
+      maximum-pool-size: 16
+  cache:
+    redis:
+      time-to-live: 300s

@@ -1,0 +1,32 @@
+# Maven
+/target/
+**/target/
+.mvn/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+.project
+.classpath
+.settings/
+
+# OS/Env
+.DS_Store
+Thumbs.db
+*.log
+logs/
+.env
+.env.*
+*.swp
+
+# Docker
+**/.dockerignore
+
+# Node (if any frontend later)
+node_modules/
+dist/
+
+# Others
+out/
+bin/

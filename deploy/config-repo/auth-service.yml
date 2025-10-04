@@ -1,0 +1,8 @@
+spring:
+  datasource:
+    hikari:
+      maximum-pool-size: 10
+security:
+  jwt:
+    secret: ${JWT_SECRET:dev-secret-change}
+    ttl-seconds: 3600

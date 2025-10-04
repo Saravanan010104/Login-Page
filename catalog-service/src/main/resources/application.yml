@@ -1,0 +1,36 @@
+server:
+  port: 9002
+spring:
+  application:
+    name: catalog-service
+  datasource:
+    url: jdbc:postgresql://localhost:5432/catalogdb
+    username: catalog
+    password: catalog
+    hikari:
+      maximum-pool-size: 16
+  cache:
+    type: redis
+  data:
+    redis:
+      host: localhost
+      port: 6379
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+  cloud:
+    config:
+      uri: http://localhost:8888
+    discovery:
+      enabled: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
